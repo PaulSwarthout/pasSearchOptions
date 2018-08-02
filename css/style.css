@@ -1,0 +1,51 @@
+.row {
+	background-color:lightgray;
+	line-height:1.5;
+}
+.id {
+	text-align:right;
+}
+.option_name {
+	text-align:left;
+	font-size:14pt;
+}
+.option_value {
+	text-align:left;
+	font-size:14pt;
+	font-family:arial;
+	padding:0 0 0 20px;
+	border:2pt inset;
+	background-color:white;
+}
+.row .option_value {
+	width:400px;
+}
+#testBox {
+	font-family:courer-new;
+	font-size:18pt;
+	position:fixed;
+	right:0px;
+	top:50px;
+	width:200px;
+	height:150px;
+	background-color:white;
+	color:black;
+}
+#searchBox {
+	position:fixed;
+	top:50px;
+	left:200px;
+}
+#results {
+	margin:50px 0px 25px 25px;
+}
+.killField {
+	width:25px;
+	text-align:center;
+}
+.killBTN {
+	font-family:courier-new;
+	font-size:8pt;
+	color:black;
+	width:40px;
+}

@@ -41,7 +41,7 @@ function pasSearchOptions_scripts() {
 
 function pasSearchOptions_search() {
 	echo "<div id='searchBox'>";
-	echo "<input id='searchString' type='text' onkeyup='javascript:grabKey(this);'>&nbsp;&nbsp;<input type='button' id='searchBTN' value='Search' onclick='javascript:search();' class='blueButton'>";
+	echo "<input value='" . get_option('pas_search_string', '') . "' id='searchString' type='text' onkeyup='javascript:grabKey(this);'>&nbsp;&nbsp;<input type='button' id='searchBTN' value='Search' onclick='javascript:search();' class='blueButton'>";
 	echo "</div>";
 
 	echo "<div id='results'>";
@@ -51,6 +51,10 @@ function pasSearchOptions_search() {
 function pasSearchOptions_findIt() {
 	global $wpdb;
 
+	if (strlen($_POST['searchString']) > 0) {
+		update_option('pas_search_string', $_POST['searchString']);
+	}
+
 	if (array_key_exists('searchString', $_POST)) {
 		$searchString = $_POST['searchString'];
 
@@ -58,8 +62,6 @@ function pasSearchOptions_findIt() {
 					.	" from " . $wpdb->prefix . "options "
 					. " where option_name like \"%" . $searchString . "%\" "
 					. " order by option_name asc; ";
-		$dbg->write(['heading'=>'$iSQL', 'data'=>$iSQL]);
-//		$dbg->dump();
 
 		$results = $wpdb->get_results($iSQL, ARRAY_A);
 		if (0 < count($results)) {

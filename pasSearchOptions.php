@@ -11,20 +11,19 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-$pluginDirectory	= plugin_dir_path( __FILE__ );
-$pluginName				= "Search Options";
-$pluginFolder			= "pasSearchOptions";
+$pluginDirectory= plugin_dir_path( __FILE__ );
+$pluginName		= "Search Options";
+$pluginFolder	= "pasSearchOptions";
 
-add_action('admin_menu',							 'pasSearchOptions_admin' );
-add_action('admin_enqueue_scripts',		 'pasSearchOptions_styles' );
-add_action('admin_enqueue_scripts',		 'pasSearchOptions_scripts');
+add_action('admin_menu',			'pasSearchOptions_admin' );
+add_action('admin_enqueue_scripts',	'pasSearchOptions_styles' );
+add_action('admin_enqueue_scripts',	'pasSearchOptions_scripts');
 
-add_action('wp_ajax_searchForIt',				 'pasSearchOptions_findIt');
-add_action('wp_ajax_killRecord',			 'pasSearchOptions_killRecord');
+add_action('wp_ajax_searchForIt',	'pasSearchOptions_findIt');
+add_action('wp_ajax_killRecord',	'pasSearchOptions_killRecord');
 
 function pasSearchOptions_admin() {
 	add_menu_page( 'SearchOptions', 'Search Options', 'manage_options', 'manage_options', 'pasSearchOptions_search', "", 1);
-//	add_submenu_page('manage_child_themes', 'Generate ScreenShot', 'Generate ScreenShot', 'manage_options', 'genScreenShot', 'generateScreenShot');
 }
 
 function pasSearchOptions_styles() {
@@ -67,7 +66,7 @@ function pasSearchOptions_findIt() {
 		if (0 < count($results)) {
 			echo "<table border=0 cellspacing=3>";
 			$row = $results[0];
-			echo "<tr>";
+			echo "<tr><th></th>";
 			foreach ($row as $key => $value) {
 				echo "<TH>" . $key . "</TH>";
 			}

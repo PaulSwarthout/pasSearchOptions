@@ -13,9 +13,16 @@
 	text-align:left;
 	font-size:14pt;
 	font-family:arial;
-	padding:0 0 0 20px;
+	padding:0 0 0 5px;
 	border:2pt inset;
 	background-color:white;
+}
+.option_value #actual_value {
+	text-align:left;
+	border:0pt;
+	width:100%;
+	margin:0px;
+	padding:0px;
 }
 .row .option_value {
 	width:400px;
@@ -48,4 +55,22 @@
 	font-size:8pt;
 	color:black;
 	width:40px;
+}
+#expanded_value {
+	width:600px;
+	height:400px;
+	overflow:auto;
+	background-color:yellow;
+	color:red;
+	font-size:12pt;
+	font-family:monospace;
+	position:fixed;
+	top:50%;
+	left:50%;
+	margin-top:-200px;
+	margin-left:-300px;
+	border:solid 1pt black;
+	border-radius:15px;
+	box-shadow:10px 10px 10px rgba(0, 0, 0, .5);
+	padding:10px;
 }

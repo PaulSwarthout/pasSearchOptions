@@ -21,6 +21,8 @@ add_action('admin_enqueue_scripts',	'pasSearchOptions_scripts');
 
 add_action('wp_ajax_searchForIt',	'pasSearchOptions_findIt');
 add_action('wp_ajax_killRecord',	'pasSearchOptions_killRecord');
+add_action('wp_ajax_update_option_value', 'pasSearchOptions_updateOption');
+add_action('wp_ajax_get_option_value', 'pasSearchOptions_getOption');
 
 function pasSearchOptions_admin() {
 	add_menu_page( 'SearchOptions', 'Search Options', 'manage_options', 'manage_options', 'pasSearchOptions_search', "", 1);
@@ -52,6 +54,8 @@ function pasSearchOptions_findIt() {
 
 	if (strlen($_POST['searchString']) > 0) {
 		update_option('pas_search_string', $_POST['searchString']);
+	} else {
+		return;
 	}
 
 	if (array_key_exists('searchString', $_POST)) {
@@ -75,11 +79,12 @@ function pasSearchOptions_findIt() {
 			foreach ($results as $row) {
 				echo "<tr class='row'>";
 				echo "<td class='killField'>";
-				echo "<input type='button' value='delete' class='killBTN' onclick='javascript:killThisRecord(" . $row['option_id'] . ", \"$searchString\");'>";
+				echo "<input type='button' value='delete' class='killBTN' onclick='javascript:killThisRecord(" . $row['option_id'] . ");'>";
 				echo "</td>";
 				foreach ($row as $key => $value) {
-					echo "<td class='$key'>" . $value . "</td>";
+					echo "<td class='$key'><input type='text' data-original-value='{$value}' value='{$value}' id='actual_value'></td>";
 				}
+				echo "<td><input type='button' value='Expand' onclick='javascript:pas_opt_expandValue(\"{$row['option_name']}\");'></td>";
 				echo "</tr>";
 			}
 			echo "</table>";
@@ -98,4 +103,23 @@ function pasSearchOptions_killRecord() {
 	$results = $wpdb->get_results($isql);
 	exit;
 
+}
+function pasSearchOptions_updateOption() {
+	global $wpdb;
+
+	$id = $_POST['option_id'];
+	$value = $_POST['option_value'];
+	$options_table = $wpdb->prefix . "options";
+
+	$isql = $wpdb->prepare(" update {$options_table} set option_value = %s where option_id = %d; ", $value, $id);
+	$wpdb->get_results($isql);
+}
+function pasSearchOptions_getOption() {
+	$option_name = sanitize_text_field($_POST['option_name']);
+	$result = get_option($option_name, "");
+	if (is_array($result)) {
+		echo "<pre>" . print_r($result, true) . "</pre>";
+	} else {
+		echo "Not an array, nothing to expand";
+	}
 }

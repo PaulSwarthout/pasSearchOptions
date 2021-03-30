@@ -7,25 +7,28 @@
 	Author: Paul A. Swarthout
 	License: GPL2
 */
+namespace search_options;
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
+
+require( dirname( __FILE__ ) . '/includes/symlinks.php' );
 
 $pluginDirectory= plugin_dir_path( __FILE__ );
 $pluginName		= "Search Options";
 $pluginFolder	= "pasSearchOptions";
 
-add_action('admin_menu',			'pasSearchOptions_admin' );
-add_action('admin_enqueue_scripts',	'pasSearchOptions_styles' );
-add_action('admin_enqueue_scripts',	'pasSearchOptions_scripts');
+add_action('admin_menu',					__NAMESPACE__ . '\pasSearchOptions_admin' );
+add_action('admin_enqueue_scripts',			__NAMESPACE__ . '\pasSearchOptions_styles' );
+add_action('admin_enqueue_scripts',			__NAMESPACE__ . '\pasSearchOptions_scripts');
 
-add_action('wp_ajax_searchForIt',	'pasSearchOptions_findIt');
-add_action('wp_ajax_killRecord',	'pasSearchOptions_killRecord');
-add_action('wp_ajax_update_option_value', 'pasSearchOptions_updateOption');
-add_action('wp_ajax_get_option_value', 'pasSearchOptions_getOption');
+add_action('wp_ajax_searchForIt',			__NAMESPACE__ . '\pasSearchOptions_findIt');
+add_action('wp_ajax_killRecord',			__NAMESPACE__ . '\pasSearchOptions_killRecord');
+add_action('wp_ajax_update_option_value', 	__NAMESPACE__ . '\pasSearchOptions_updateOption');
+add_action('wp_ajax_get_option_value', 		__NAMESPACE__ . '\pasSearchOptions_getOption');
 
 function pasSearchOptions_admin() {
-	add_menu_page( 'SearchOptions', 'Search Options', 'manage_options', 'manage_options', 'pasSearchOptions_search', "", 1);
+	add_menu_page( 'SearchOptions', 'Search Options', 'manage_options', 'manage_options', __NAMESPACE__ . '\pasSearchOptions_search', "", 1);
 }
 
 function pasSearchOptions_styles() {
@@ -35,6 +38,7 @@ function pasSearchOptions_styles() {
 }
 
 function pasSearchOptions_scripts() {
+	$file = __FILE__;
 	$pluginDirectory = plugin_dir_url( __FILE__ );
 	$debugging = constant('WP_DEBUG');
 	wp_enqueue_script('pasSearchOptions', $pluginDirectory . "js/pasSearchOptions.js" . ($debugging ? "?v=" . rand(0,99999) . "&" : ""), false);
@@ -69,8 +73,16 @@ function pasSearchOptions_findIt() {
 		$results = $wpdb->get_results($iSQL, ARRAY_A);
 		if (0 < count($results)) {
 			echo "<table border=0 cellspacing=3>";
+
+			echo "<col width='25px'>";
+			echo "<col width='25px'>";
+			echo "<col width='40px'>";
+			echo "<col width='40px'>";
+			echo "<col width='100px'>";
+			echo "<col width='600px'>";
+
 			$row = $results[0];
-			echo "<tr><th></th>";
+			echo "<tr><th></th><th></th><th></th>";
 			foreach ($row as $key => $value) {
 				echo "<TH>" . $key . "</TH>";
 			}
@@ -78,13 +90,19 @@ function pasSearchOptions_findIt() {
 
 			foreach ($results as $row) {
 				echo "<tr class='row'>";
+				echo "<td><input type='checkbox' value='' name='del_{$row['option_id']}'></td>";
 				echo "<td class='killField'>";
 				echo "<input type='button' value='delete' class='killBTN' onclick='javascript:killThisRecord(" . $row['option_id'] . ");'>";
 				echo "</td>";
-				foreach ($row as $key => $value) {
-					echo "<td class='$key'><input type='text' data-original-value='{$value}' value='{$value}' id='actual_value'></td>";
-				}
 				echo "<td><input type='button' value='Expand' onclick='javascript:pas_opt_expandValue(\"{$row['option_name']}\");'></td>";
+				foreach ($row as $key => $value) {
+					if ($key == 'option_value') {
+						$style = " style='width:400px;' ";
+					} else {
+						$style = "";
+					}
+					echo "<td class='$key' {$style}>" . htmlentities($value) . "</td>";
+				}
 				echo "</tr>";
 			}
 			echo "</table>";

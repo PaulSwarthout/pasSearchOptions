@@ -67,7 +67,7 @@ function search(element) {
 		if (4 == xmlhttp.readyState) {
 			if (200 == xmlhttp.status) {
 				var results = document.getElementById("results")
-				results.innerHTML = response
+				results.innerHTML = response;
 			}
 		}
 	}

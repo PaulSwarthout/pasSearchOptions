@@ -1,13 +1,23 @@
+#results table {
+	table-layout:fixed;
+	width:100%;
+}
+#results td {
+	vertical-align:top;
+}
 .row {
 	background-color:lightgray;
 	line-height:1.5;
 }
 .id {
 	text-align:right;
+	width:40px;
 }
 .option_name {
 	text-align:left;
 	font-size:14pt;
+	width:100px;
+	overflow:hidden;
 }
 .option_value {
 	text-align:left;
@@ -16,17 +26,21 @@
 	padding:0 0 0 5px;
 	border:2pt inset;
 	background-color:white;
+	width:500px;
+	white-space:nowrap;
+	overflow:hidden;
 }
 .option_value #actual_value {
 	text-align:left;
 	border:0pt;
-	width:100%;
 	margin:0px;
 	padding:0px;
 }
+/*
 .row .option_value {
 	width:400px;
 }
+*/
 #testBox {
 	font-family:courer-new;
 	font-size:18pt;
@@ -57,8 +71,8 @@
 	width:40px;
 }
 #expanded_value {
-	width:600px;
-	height:400px;
+	width:800px;
+	height:600px;
 	overflow:auto;
 	background-color:yellow;
 	color:red;
@@ -67,8 +81,8 @@
 	position:fixed;
 	top:50%;
 	left:50%;
-	margin-top:-200px;
-	margin-left:-300px;
+	margin-top:-300px;
+	margin-left:-400px;
 	border:solid 1pt black;
 	border-radius:15px;
 	box-shadow:10px 10px 10px rgba(0, 0, 0, .5);
